@@ -16,12 +16,22 @@ st.markdown("### Predict Median House Values in California (1990)")
 @st.cache_resource
 def load_models():
     try:
-        model = joblib.load('polynomial_house_model.pkl')
-        scaler = joblib.load('scaler.pkl')
-        poly = joblib.load('poly_features.pkl')
+        import os
+
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+        model_path = os.path.join(BASE_DIR, "polynomial_house_model.pkl")
+        scaler_path = os.path.join(BASE_DIR, "scaler.pkl")
+        poly_path = os.path.join(BASE_DIR, "poly_features.pkl")
+
+        model = joblib.load(model_path)
+        scaler = joblib.load(scaler_path)
+        poly = joblib.load(poly_path)
+
         return model, scaler, poly
-    except FileNotFoundError:
-        st.error("❌ Model files not found. Please make sure the .pkl files are in the same folder.")
+
+    except Exception as e:
+        st.error(f"❌ Error loading model files: {e}")
         st.stop()
 
 model, scaler, poly = load_models()
